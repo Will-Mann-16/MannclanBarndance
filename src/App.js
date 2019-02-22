@@ -65,7 +65,7 @@ class App extends Component {
                                         <p>Information</p>
                                         </div>
                                     </Route>
-                                    <Route path="/mannclan-admin" component={AdminPage} />
+                                    <Route path="/mannclan-admin" exact component={AdminPage} />
                                     <Route path="/:token" component={MainPage} />
                                     <Route component={NotFoundPage}/>
                                 </Switch>
