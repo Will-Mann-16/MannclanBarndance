@@ -60,8 +60,10 @@ class App extends Component {
                             <Main>
                                 <Switch>
                                     <Route path="/" exact>
+                                        <div>
                                         <h1>Welcome to the Mannclan Barn Dance of 2019 web page.</h1>
                                         <p>Information</p>
+                                        </div>
                                     </Route>
                                     <Route path="/mannclan-admin" component={AdminPage} />
                                     <Route path="/:token" component={MainPage} />
