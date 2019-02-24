@@ -32,7 +32,13 @@ const CREATE_INVITEE = gql`
 
 export default class AdminPage extends React.Component{
     state = {
-        invitees: []
+        invitees: [],
+        newInvitee: {
+            name: '',
+            email: '',
+            noOfAttendees: 0,
+            token: uuid()
+        }
     }
     countWords = (str) => {
         if(!str) return 0;
@@ -74,6 +80,7 @@ export default class AdminPage extends React.Component{
               <Query query={AdminQuery}>
                   {({data, loading}) => loading ? <p>Loading</p> :
                       <div>
+                      <h2>Import Excel File</h2>
                           <input type="file" onChange={this.handleImport}/>
                           {this.state.invitees.map((invitee, key) =>
                           <Mutation mutation={CREATE_INVITEE} variables={invitee} key={key}>
@@ -83,6 +90,19 @@ export default class AdminPage extends React.Component{
                           </Mutation>
                           )}
                           <h2>Attendees</h2>
+                          <Mutation mutation={CREATE_INVITEE} variables={this.state.newInvitee}>
+                              {createInvitee =>
+                                  <form onSubmit={e => {
+                                      e.preventDefault();
+                                      createInvitee();
+                                  }}>
+                                      <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, name: e.target.value}})} placeholder="Name"/>
+                                      <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, email: e.target.value}})} placeholder="Email"/>
+                                      <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, noOfAttendees: parseInt(e.target.value)}})} placeholder="Number of people coming" type="number"/>
+                                      <button type='submit'>Submit</button>
+                                  </form>
+                              }
+                          </Mutation>
                       <table>
                       <tbody>
                       <tr>

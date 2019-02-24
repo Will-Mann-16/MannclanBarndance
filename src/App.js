@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import MainPage from './MainPage';
 import AdminPage from './AdminPage';
 import styled from 'styled-components';
+import image from './image001.jpg';
 
 const client = new ApolloClient({
     uri: 'https://api-euwest.graphcms.com/v1/cjsasi0m3cz8y01gjwy0sp65f/master'
@@ -21,9 +22,10 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #273c75;
     color: white;
     text-align: center;
+    background-color: white;
+    border-bottom: 5px solid #333;
 `;
 
 const Main = styled.main`
@@ -55,7 +57,7 @@ class App extends Component {
                     <Router>
                         <Fragment>
                             <Header>
-                                <h1>Mannclan Barn Dance</h1>
+                                <img src={image} style={{width: 960, height: 'auto'}}/>
                             </Header>
                             <Main>
                                 <Switch>
@@ -71,7 +73,7 @@ class App extends Component {
                                 </Switch>
                             </Main>
                             <Footer>
-                                <h3>Powered by Mann Power</h3>
+                                <h3>We look forward to seeing you!</h3>
                             </Footer>
                         </Fragment>
                     </Router>
