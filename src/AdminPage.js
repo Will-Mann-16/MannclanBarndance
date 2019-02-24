@@ -2,7 +2,19 @@ import React from 'react';
 import {Mutation, Query} from 'react-apollo';
 import gql from 'graphql-tag';
 import XLSX from 'xlsx';
+import FileSaver from 'file-saver';
+import styled from 'styled-components';
 import uuid from 'uuid/v1';
+
+const Form = styled.form`
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    flex-direction: row;
+    & > *{
+        flex-grow: 1;
+    }
+`;
 
 const AdminQuery = gql`
     query AdminQuery{
@@ -10,6 +22,7 @@ const AdminQuery = gql`
             name
             email
             noOfAttendees
+            token
         }
         attendees{
             firstname
@@ -73,6 +86,36 @@ export default class AdminPage extends React.Component{
         }
         reader.readAsBinaryString(selectedFile);
     }
+    downloadExcel(data){
+        var jsonArr = [];
+        data.forEach(row => {
+            jsonArr.push({
+                Salutation: row.name,
+                Email: row.email,
+                NumberOfPeople: row.noOfAttendees,
+                Token: row.token
+            });
+        });
+        var ws = XLSX.utils.json_to_sheet(jsonArr, {
+            header: ['Salutation', 'Email', 'NumberOfPeople', 'Token']
+        });
+        var wb = XLSX.utils.book_new();
+        wb.SheetNames.push('Barndance');
+        wb.Sheets['Barndance'] = ws;
+        const s2ab = function(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i != s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+            return buf;
+        };
+        var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
+        var wbout = XLSX.write(wb, wopts);
+        FileSaver.saveAs(
+            new Blob([s2ab(wbout)], { type: 'application/octet-stream' }),
+            'barndance.xlsx'
+        );
+
+    }
     render(){
         return (
           <div>
@@ -89,20 +132,52 @@ export default class AdminPage extends React.Component{
                               }
                           </Mutation>
                           )}
-                          <h2>Attendees</h2>
+                          <h2>Invited</h2>
                           <Mutation mutation={CREATE_INVITEE} variables={this.state.newInvitee}>
                               {createInvitee =>
-                                  <form onSubmit={e => {
+                                  <Form onSubmit={e => {
                                       e.preventDefault();
-                                      createInvitee();
+                                      createInvitee().then(() => this.setState({...this.state, newInvitee: {
+                                          name: '',
+                                              email: '',
+                                              noOfAttendees: 0,
+                                              token: uuid()
+                                      }}));
                                   }}>
                                       <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, name: e.target.value}})} placeholder="Name"/>
                                       <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, email: e.target.value}})} placeholder="Email"/>
                                       <input onChange={e => this.setState({...this.state, newInvitee: {...this.state.newInvitee, noOfAttendees: parseInt(e.target.value)}})} placeholder="Number of people coming" type="number"/>
                                       <button type='submit'>Submit</button>
-                                  </form>
+                                  </Form>
                               }
                           </Mutation>
+                          <button onClick={() => this.downloadExcel(data.invitees)}>Download Excel</button>
+                          <table>
+                              <tbody>
+                              <tr>
+                                  <th>
+                                      Name
+                                  </th>
+                                  <th>
+                                      Email
+                                  </th>
+                                  <th>
+                                      No. Of People
+                                  </th>
+                                  <th>Token</th>
+                              </tr>
+                              {data.invitees.map((invitee) =>
+                                  <tr>
+                                      <td>{invitee.name}</td>
+                                      <td>{invitee.email}</td>
+                                      <td>{invitee.noOfAttendees}</td>
+                                      <td>{invitee.token}</td>
+                                  </tr>
+                              )}
+                              </tbody>
+                          </table>
+                          <h2>Attendees</h2>
+
                       <table>
                       <tbody>
                       <tr>
@@ -131,29 +206,7 @@ export default class AdminPage extends React.Component{
                           )}
                       </tbody>
                   </table>
-                          <h2>Invited</h2>
-                          <table>
-                              <tbody>
-                              <tr>
-                                  <th>
-                                      Name
-                                  </th>
-                                  <th>
-                                      Email
-                                  </th>
-                                  <th>
-                                      No. Of People
-                                  </th>
-                              </tr>
-                              {data.invitees.map((invitee) =>
-                                  <tr>
-                                      <td>{invitee.name}</td>
-                                      <td>{invitee.email}</td>
-                                      <td>{invitee.noOfAttendees}</td>
-                                  </tr>
-                              )}
-                              </tbody>
-                          </table>
+
                       </div>}
               </Query>
           </div>

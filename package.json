@@ -5,6 +5,7 @@
   "dependencies": {
     "apollo-boost": "^0.1.28",
     "file-reader": "^1.1.1",
+    "file-saver": "^2.0.1",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "react": "^16.8.2",
