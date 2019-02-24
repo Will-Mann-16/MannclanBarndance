@@ -17,6 +17,14 @@ const Wrapper = styled.div`
     grid-template-areas: 'header' 'main' 'footer';
 `;
 
+const Image = styled.img`
+    width: 960px;
+    height: auto;
+    @media(max-width: 960px){
+        width: 100%;
+    }
+`;
+
 const Header = styled.header`
     grid-area: header;
     display: flex;
@@ -32,6 +40,7 @@ const Main = styled.main`
     grid-area: main;
     max-width: 960px;
     margin: auto;
+    height: 100%;
 `;
 
 const Footer = styled.footer`
@@ -57,7 +66,7 @@ class App extends Component {
                     <Router>
                         <Fragment>
                             <Header>
-                                <img src={image} style={{width: 960, height: 'auto'}}/>
+                                <Image src={image}/>
                             </Header>
                             <Main>
                                 <Switch>
