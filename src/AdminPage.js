@@ -93,11 +93,11 @@ export default class AdminPage extends React.Component{
                 Salutation: row.name,
                 Email: row.email,
                 NumberOfPeople: row.noOfAttendees,
-                Token: row.token
+                Link: 'https://barndance.mannclan.net/' + row.token
             });
         });
         var ws = XLSX.utils.json_to_sheet(jsonArr, {
-            header: ['Salutation', 'Email', 'NumberOfPeople', 'Token']
+            header: ['Salutation', 'Email', 'NumberOfPeople', 'Link']
         });
         var wb = XLSX.utils.book_new();
         wb.SheetNames.push('Barndance');
