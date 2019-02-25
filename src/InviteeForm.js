@@ -57,6 +57,24 @@ button {
 }
 `;
 
+const Flex = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+`;
+const MiniFlex = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    & > *{
+        margin: 5px;
+    }
+`;
+
+
 export default class InviteeForm extends React.Component{
     state = {
         firstname: '',
@@ -76,8 +94,6 @@ export default class InviteeForm extends React.Component{
 
     handleChange = e => this.setState({...this.state, [e.target.name]: e.target.value});
 
-    handleSwitchChange = e => this.setState({...this.state, [e.target.name]: e.target.value === 'on'});
-
     render(){
         return (
             <Mutation mutation={this.props.id ? editAttendee : createAttendee} variables={this.props.id ? {...this.state, id: this.props.id} : this.state}>
@@ -89,19 +105,29 @@ export default class InviteeForm extends React.Component{
                         }
                     });
                 }}>
-                    <h2>New Person</h2>
+                    <h2>Can you let us know if you are able to come or not by entering your information below?</h2>
                     {this.state.success && <div>
                         <h2>Thank you!</h2>
                         <p>{this.state.firstname} {this.state.lastname} {this.props.id ? 'updated' : 'registered'}!</p>
                     </div>}
                     <input onChange={this.handleChange} value={this.state.firstname} name="firstname" placeholder='Firstname' />
                     <input onChange={this.handleChange} value={this.state.lastname} name="lastname" placeholder='Lastname' />
-                    <label>Attending?</label>
-                    <input type="checkbox" onChange={this.handleSwitchChange} checked={this.state.attending} name='attending'/>
-                    <textarea onChange={this.handleChange} value={this.state.dietary} name="dietary" placeholder='Dietary Requirements' />
+                    <Flex>
+                        <MiniFlex>
+                            <input type="checkbox" onChange={() => this.setState({...this.state, attending: true})} checked={this.state.attending} name='attending'/>
+                            <label>Yes, see you there?</label>
+                        </MiniFlex>
+                        <MiniFlex>
+                            <input type="checkbox" onChange={() => this.setState({...this.state, attending: false})} checked={!this.state.attending} name='not-attending'/>
+                            <label>Sorry, can’t make it this time</label>
+                        </MiniFlex>
+                    </Flex>
+                    <textarea onChange={this.handleChange} value={this.state.dietary} name="dietary" placeholder='Do you have any special dietary requirements?' />
+                    <MiniFlex>
                     <label>Do you need accommodation under canvas?</label>
-                    <input type="checkbox" onChange={this.handleSwitchChange} checked={this.state.accommodation} name='accommodation'/>
-                    <textarea onChange={this.handleChange} value={this.state.additional} name="additional" placeholder='Additional Notes' />
+                    <input type="checkbox" onChange={() => this.setState({...this.state, accommodation: !this.state.accommodation})}  checked={this.state.accommodation} name='accommodation'/>
+                    </MiniFlex>
+                    <textarea onChange={this.handleChange} value={this.state.additional} name="additional" placeholder='Any other questions or comments?' />
                     <button type="submit">Submit</button>
                 </Form>
                 }

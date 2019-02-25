@@ -48,6 +48,7 @@ const Footer = styled.footer`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     background-color: #dcdde1;
 `;
 
@@ -72,8 +73,8 @@ class App extends Component {
                                 <Switch>
                                     <Route path="/" exact>
                                         <div>
-                                        <h1>Welcome to the Mannclan Barn Dance of 2019 web page.</h1>
-                                        <p>Information</p>
+                                        <h1>Welcome to the Mannclan Barn Dance of 2019!</h1>
+                                        <p>Information about this event can be seen on your emails, or on this webpage here. Each link sent to the recipients are unique, so are required to sign up with this site.</p>
                                         </div>
                                     </Route>
                                     <Route path="/mannclan-admin" exact component={AdminPage} />
@@ -83,6 +84,8 @@ class App extends Component {
                             </Main>
                             <Footer>
                                 <h3>We look forward to seeing you!</h3>
+                                <p>Lockram House can be found about halfway along Lockram Lane, set back from the road in between the grass triangle and the cream half-timbered cottage (we are NOT Lockram Farmhouse).</p>
+                                <p>Call <a href="tel:+447831171097">07831 171097</a> if you get lost.</p>
                             </Footer>
                         </Fragment>
                     </Router>

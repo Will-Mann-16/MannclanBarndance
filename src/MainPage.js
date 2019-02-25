@@ -44,8 +44,8 @@ export default class MainPage extends Component {
                     {({data, loading}) => {
                         if(loading) return <p>Loading</p>;
                         return data.invitees.map((invitee, key) => <div key={key}>
-                            <h1>Welcome {invitee.name}</h1>
-                            <h3>You have {invitee.noOfAttendees} people available to you.</h3>
+                            <h1>Dear {invitee.name}</h1>
+                            <h3>We hope you can join us on Saturday March 30th at 7pm for our Barn Dance.</h3>
                             <Flex>
                             {invitee.attendees.map((attendee, i) => <InviteeForm inviteeID={invitee.id} attendee={attendee} id={attendee.id} />)}
                             {[...Array(invitee.noOfAttendees - invitee.attendees.length)].map((x, i) => <InviteeForm inviteeID={invitee.id}/>)}
